@@ -3,6 +3,7 @@ import {useState} from "react";
 import {ethers} from "ethers";
 import { BrowserProvider, Contract } from "ethers";
 import { contractAddress, contractABI } from './contract';
+import Imageupload from './Imageupload';
 
 function App() {
   const [account, setAccount] = useState(null);
@@ -72,6 +73,8 @@ function App() {
 <button onClick={registerUser}>Register</button>
 
 <hr />
+
+<Imageupload/>
 
 <h3>Create Post</h3>
 <input
