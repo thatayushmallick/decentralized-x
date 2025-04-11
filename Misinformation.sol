@@ -50,7 +50,11 @@ contract Misinformation is PostContract{
         uint totalVotes = yesVotes[_postId] + noVotes[_postId];
         if (totalVotes >= MIN_VOTES_REQUIRED) {
             bool finalVerdict = yesVotes[_postId] > noVotes[_postId];
-            posts[_postId].isVerified = !finalVerdict; // true if it's NOT misinformation
+            if (finalVerdict) {
+                posts[_postId].status = VerificationStatus.Verified;
+            } else {
+                posts[_postId].status = VerificationStatus.Misinformation;
+            }
             consesed[_postId]=true;
             posts[_postId].isFlagged=false;
             emit FinalVerdict(_postId, finalVerdict);

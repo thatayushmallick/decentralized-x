@@ -5,7 +5,7 @@ contract PostContract{
     int constant MIN_REPUTATION=500;
     uint public postId=0;
     uint public userCount=0;
-
+    enum VerificationStatus { Normal, Verified, Misinformation }
 
 
     struct User{
@@ -24,7 +24,7 @@ contract PostContract{
         uint likes;
         uint dislikes;
         bool isFlagged;
-        bool isVerified;
+        VerificationStatus status;
     }
 
 
@@ -61,8 +61,9 @@ contract PostContract{
         emit userRedistered(msg.sender, _username);
     }
 
-    function createPost(string memory _hash) public {
+    function createPost(string memory _hash ) public {
         require(isRegistered[msg.sender], "User need to register first");
+        VerificationStatus postStatus = users[msg.sender].isVerified ? VerificationStatus.Verified : VerificationStatus.Normal;
         postId++;
         posts[postId]=post({
 
@@ -73,7 +74,7 @@ contract PostContract{
             likes: 0,
             dislikes: 0,
             isFlagged: false,
-            isVerified: true
+            status: postStatus
         });
         users[msg.sender].userPosts.push(postId);
         users[msg.sender].postCount++;
@@ -91,7 +92,11 @@ contract PostContract{
     }
 
     function getPost(uint _postId) public view postExists(_postId) returns (address, uint, string memory, uint) {
-    post memory p = posts[_postId];
-    return (p.author, p.postedAt, p.hash, p.id);
+        post memory p = posts[_postId];
+        return (p.author, p.postedAt, p.hash, p.id);
     }
+    function getUser(address _user) public view returns (address,string memory,uint,int,bool) {
+    User memory u = users[_user];
+    return (u.userAddress,u.username,u.postCount,u.reputation,u.isVerified);
+}
 }
