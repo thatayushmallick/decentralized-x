@@ -42,8 +42,12 @@ contract PostContract{
 
     event userRedistered(address indexed user, string username);
     event postCreated(uint indexed postId, address indexed author, string hash);
+    event userLogged(address indexed user, string username);
 
-
+    function login() public {
+        require(isRegistered[msg.sender],"Kindly register");
+        emit userLogged(msg.sender, users[msg.sender].username);
+    }
     function register(string memory _username) public {
         require(!isRegistered[msg.sender], "User is already registered");
         User storage newUser = users[msg.sender]; 
