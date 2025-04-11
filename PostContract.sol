@@ -1,9 +1,10 @@
 // SPDX-License-Identifier: GPL-3.0
 pragma solidity ^0.8.12;
 
-contract appcontract{
+contract PostContract{
+    int constant MIN_REPUTATION=500;
     uint public postId=0;
-
+    uint public userCount=0;
 
 
 
@@ -12,17 +13,23 @@ contract appcontract{
         string username;
         uint postCount;
         uint[] userPosts;
+        int reputation;
+        bool isVerified;
     }
     struct post{
         address author;
         uint postedAt;
         string hash;
         uint id;
+        uint likes;
+        uint dislikes;
+        bool isFlagged;
+        bool isVerified;
     }
 
 
 
-
+    mapping (uint => bool) public consesed;
     mapping (uint=>post) public posts;
     mapping(address=>bool) isRegistered;
     mapping(address=>User) public users;
@@ -43,8 +50,10 @@ contract appcontract{
         newUser.userAddress = msg.sender;
         newUser.username = _username;
         newUser.postCount=0;
+        newUser.reputation=500;
+        newUser.isVerified=true;
         isRegistered[msg.sender]=true;
-
+        userCount++;
         emit userRedistered(msg.sender, _username);
     }
 
@@ -56,13 +65,27 @@ contract appcontract{
             author:msg.sender,
             postedAt: block.timestamp,
             hash: _hash,
-            id: postId
+            id: postId,
+            likes: 0,
+            dislikes: 0,
+            isFlagged: false,
+            isVerified: true
         });
         users[msg.sender].userPosts.push(postId);
         users[msg.sender].postCount++;
-
+        consesed[postId]=false;
         emit postCreated(postId, msg.sender, _hash);
     }
+
+    function adjustReputation(address _user, int adjust) public{
+        users[_user].reputation += adjust;
+        if(users[_user].reputation >= MIN_REPUTATION){
+            users[_user].isVerified = true;
+        }else{
+            users[_user].isVerified = false;
+        }
+    }
+
     function getPost(uint _postId) public view postExists(_postId) returns (address, uint, string memory, uint) {
     post memory p = posts[_postId];
     return (p.author, p.postedAt, p.hash, p.id);
