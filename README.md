@@ -63,10 +63,11 @@ cd decentralized-x
 
 ### 2. Install Dependencies
 
-Run the command :
+Run the commands :
 
 ```bash
-npm install
+cd frontend
+npm i
 ```
 
 ### 3. Configure Metamask wallet
