@@ -17,11 +17,8 @@ This project demonstrates how decentralized technologies can be harnessed to tac
 ## 🔧 Prerequisites
 
 - Node.js (v16 or later)
-- NPM or Yarn
-- Hardhat (`npm install --save-dev hardhat`)
+- NPM
 - Metamask wallet (connected to Sepolia Testnet)
-- Pinata account for IPFS storage
-- Infura or Alchemy endpoint (for Sepolia RPC)
 
 ---
 
@@ -60,8 +57,8 @@ Manages:
 ### 1. Clone the repository
 
 ```bash
-git clone https://github.com/your-username/decentralized-social-media.git
-cd decentralized-social-media
+git clone https://github.com/thatayushmallick/decentralized-x.git
+cd decentralized-x
 ```
 
 ### 2. Install Dependencies
