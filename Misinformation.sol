@@ -38,6 +38,8 @@ contract Misinformation is PostContract{
         require(!hasVoted[_postId][msg.sender], "Already voted");
         require(!consesed[_postId], "Already consensus reached");
 
+        string memory _hashed=posts[_postId].hash;
+
         if (_isMisinformation) {
             yesVotes[_postId]++;
         } else {
@@ -51,12 +53,42 @@ contract Misinformation is PostContract{
         if (totalVotes >= MIN_VOTES_REQUIRED) {
             bool finalVerdict = yesVotes[_postId] > noVotes[_postId];
             if (finalVerdict) {
-                posts[_postId].status = VerificationStatus.Verified;
-            } else {
                 posts[_postId].status = VerificationStatus.Misinformation;
+                for(uint i=1; i <= postId; i++){
+                    if (keccak256(bytes(posts[i].hash)) == keccak256(bytes(_hashed))) {
+                        posts[i].status = VerificationStatus.Misinformation;
+                        adjustReputation(posts[i].author, -50);
+                        consesed[i] = true;
+                        posts[i].isFlagged = false;
+                    }
+                }
+                for (uint i = 0; i < usersArray.length; i++) {
+                    address reporter = usersArray[i];
+                    if (hasReported[_postId][reporter]) {
+                        adjustReputation(reporter, 2); // reward
+                    }
+                }
+            } else {
+                posts[_postId].status = VerificationStatus.Verified;
+                for(uint i=1; i <= postId; i++){
+                    if (keccak256(bytes(posts[i].hash)) == keccak256(bytes(_hashed))) {
+                        posts[i].status = VerificationStatus.Verified;
+                        consesed[i] = true;
+                        posts[i].isFlagged = false;
+                    }
+                }
+                for (uint i = 0; i < usersArray.length; i++) {
+                    address reporter = usersArray[i];
+                    if (hasReported[_postId][reporter]) {
+                        adjustReputation(reporter, -2); // reward
+                    }
+                }
             }
             consesed[_postId]=true;
             posts[_postId].isFlagged=false;
+
+            
+
             emit FinalVerdict(_postId, finalVerdict);
         }
     }
