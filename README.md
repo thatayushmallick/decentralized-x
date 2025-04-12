@@ -17,11 +17,8 @@ This project demonstrates how decentralized technologies can be harnessed to tac
 ## 🔧 Prerequisites
 
 - Node.js (v16 or later)
-- NPM or Yarn
-- Hardhat (`npm install --save-dev hardhat`)
+- NPM
 - Metamask wallet (connected to Sepolia Testnet)
-- Pinata account for IPFS storage
-- Infura or Alchemy endpoint (for Sepolia RPC)
 
 ---
 
