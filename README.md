@@ -107,11 +107,11 @@ Contributions are welcome! Please fork the repo and open a pull request. Feel fr
 
 Built by :
 
-- Ayush Mallick
+- [Ayush Mallick](https://github.com/thatayushmallick)
 
-- Ameya Langer
+- [Ameya Langer](https://github.com/Ameya16260)
 
-- Pratyush Kaurav
+- [Pratyush Kaurav](https://github.com/pratyush1602)
 
 as part of an academic course project.
 
